@@ -1,6 +1,7 @@
 import axios from 'axios';
 
 const BASE_URL = 'https://api.coingecko.com/api/v3/simple/price';
+const API_KEY = process.env.COINGECKO_API_KEY // Replace with your actual API key
 
 /**
  * Fetch cryptocurrency price data from CoinGecko API.
@@ -18,19 +19,31 @@ export const getCryptoPrice = async (
   include24HrChange = false
 ) => {
   try {
+    // Add the API key as a query parameter
     const queryParams = new URLSearchParams({
       ids: cryptoId,
       vs_currencies: vsCurrency,
       include_market_cap: includeMarketCap,
       include_24hr_change: include24HrChange,
+      x_cg_demo_api_key: API_KEY,  // Add the API key
     });
 
     const apiUrl = `${BASE_URL}?${queryParams.toString()}`;
 
-    const { data } = await axios.get(apiUrl);
+    const { data, headers } = await axios.get(apiUrl);
+
+    // Check rate limit status from response headers
+    const remainingRequests = headers['x-ratelimit-remaining'];
+    const resetTime = headers['x-ratelimit-reset']; // Time when rate limit will reset
+
+    if (remainingRequests === 0) {
+      const waitTime = (resetTime - Math.floor(Date.now() / 1000)) + 1; // in seconds
+      console.log(`Rate limit reached. Please wait for ${waitTime} seconds.`);
+      await new Promise(resolve => setTimeout(resolve, waitTime * 1000)); // Wait for reset
+      return getCryptoPrice(cryptoId, vsCurrency, includeMarketCap, include24HrChange); // Retry the request after waiting
+    }
 
     const resData = data[cryptoId];
-
     console.log(resData); // Optional logging
     return resData;
   } catch (error) {
