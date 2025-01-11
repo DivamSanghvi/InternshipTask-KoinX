@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const BASE_URL = 'https://api.coingecko.com/api/v3/simple/price';
-const API_KEY = process.env.COINGECKO_API_KEY; // Ensure the API key is correctly set
+const API_KEY="CG-Pdh52PqYnXtpPgn35ZmeFmfC"; // Ensure the API key is correctly set
 
 /**
  * Fetch cryptocurrency price data from CoinGecko API.
