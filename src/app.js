@@ -2,6 +2,9 @@ import express from "express"
 import cors from "cors"
 import cookieParser from "cookie-parser"
 import router from "./routes/Coin.routes.js"
+import { updateBitcoinPrice } from "./helper/Bitcoin.price.update.js"
+import { updateEthereumPrice } from "./helper/Etherium.price.update.js"
+import { updateMaticPrice } from "./helper/Matic.price.update.js"
 
 const app = express()
 
@@ -18,7 +21,9 @@ app.use(cookieParser())
 
 //routes declaration
 app.use('/api',router)
+updateBitcoinPrice()
+updateEthereumPrice()
+updateMaticPrice()
 
-// http://localhost:8000/api/v1/users/register
 
 export { app }
