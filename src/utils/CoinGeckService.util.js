@@ -3,6 +3,7 @@ import axios from 'axios';
 const BASE_URL = 'https://api.coingecko.com/api/v3/simple/price';
 
 /**
+ * Fetch cryptocurrency price data from CoinGecko API.
  * 
  * @param {string} cryptoId - ID of the cryptocurrency (e.g., 'bitcoin').
  * @param {string} vsCurrency - Currency to compare against (e.g., 'usd').
@@ -30,7 +31,7 @@ export const getCryptoPrice = async (
 
     const resData = data[cryptoId];
 
-    console.log(resData); 
+    console.log(resData); // Optional logging
     return resData;
   } catch (error) {
     console.error('Error fetching crypto price:', error.message);
